@@ -35,6 +35,9 @@ public class Controller {
 			case KeyEvent.VK_SPACE:
 				model.shootMissile();
 				break;
+			case KeyEvent.VK_Q:
+				model.changeShootingMode();
+				break;
 			case KeyEvent.VK_F1:
 				view.showHelp();
 				break;

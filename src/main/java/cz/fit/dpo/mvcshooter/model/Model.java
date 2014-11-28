@@ -4,6 +4,7 @@ import cz.fit.dpo.mvcshooter.model.entities.Cannon;
 import cz.fit.dpo.mvcshooter.model.entities.Collision;
 import cz.fit.dpo.mvcshooter.model.entities.Enemy;
 import cz.fit.dpo.mvcshooter.model.entities.Missile;
+import cz.fit.dpo.mvcshooter.model.strategy.RealisticMovementStrategy;
 
 import java.util.*;
 
@@ -60,11 +61,9 @@ public class Model {
 		cannon.forceDown();
 	}
 
-	private void removeEnemy(Enemy e) {
-		enemies.remove(e);
-		notifyObservers();
-	}
-
+	/**
+	 * Prida nepritele na vygenerovanou pozici
+	 */
 	private void addNewEnemy() {
 		if (enemies.size() == ModelConfig.ENEMIES_COUNT) {
 			return;
@@ -80,9 +79,39 @@ public class Model {
 		notifyObservers();
 	}
 
+	/**
+	 * Odstrani nepratele, kterym vyprsel cas pro zivot
+	 */
+	private void removeDeadEnemies() {
+		for (Iterator<Enemy> enemyIterator = enemies.iterator(); enemyIterator.hasNext(); ) {
+			Enemy enemy = enemyIterator.next();
+			enemy.decreaseRemainingTime();
+			if (!enemy.isAlive()) {
+				enemyIterator.remove();
+			}
+		}
+	}
+
+	private void removeCollisions() {
+		for (Iterator<Collision> collisionIterator = collisions.iterator(); collisionIterator.hasNext(); ) {
+			Collision collision = collisionIterator.next();
+			collision.decreaseRemainingTime();
+			if (!collision.isVisible()) {
+				collisionIterator.remove();
+			}
+		}
+	}
+
 	public void shootMissile() {
-		missiles.add(new Missile(cannon.getX(), cannon.getY(), cannon.getAngle(), cannon.getForce()));
+		Missile missile = new Missile(cannon.getX(), cannon.getY(), cannon.getAngle(), cannon.getForce());
+		// Navrhovy vzor Strategy - klient si zvoli, jaka strategie se pouzije
+		missile.setIMovementStrategy(new RealisticMovementStrategy());
+		missiles.add(missile);
 		notifyObservers();
+	}
+
+	public void changeShootingMode() {
+		cannon.changeShootingMode();
 	}
 
 	// ####################### getting data and registering #########################
@@ -126,9 +155,17 @@ public class Model {
 		timer.schedule(new TimerTask() {
 			@Override
 			public void run() {
+				removeDeadEnemies();
 				addNewEnemy();
 			}
 		}, 0, 5000);
+
+		timer.schedule(new TimerTask() {
+			@Override
+			public void run() {
+				removeCollisions();
+			}
+		}, 0, 1000);
 	}
 
 	private void initDefaultObjects() {
@@ -176,4 +213,5 @@ public class Model {
 			obs.modelUpdated();
 		}
 	}
+
 }

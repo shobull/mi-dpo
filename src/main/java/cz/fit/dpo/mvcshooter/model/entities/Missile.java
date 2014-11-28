@@ -1,6 +1,7 @@
 package cz.fit.dpo.mvcshooter.model.entities;
 
 import cz.fit.dpo.mvcshooter.model.ModelConfig;
+import cz.fit.dpo.mvcshooter.model.strategy.IMovementStrategy;
 
 /**
  * User: Lubos Palisek
@@ -18,6 +19,8 @@ public class Missile extends GameObject {
 
 	private int time = 1;
 
+	private IMovementStrategy movementStrategy;
+
 	public Missile(int x, int y, int angle, int force) {
 		super(x, y);
 		this.firstX = x;
@@ -26,12 +29,35 @@ public class Missile extends GameObject {
 		this.force = force;
 	}
 
+	public int getFirstX() {
+		return firstX;
+	}
+
+	public int getFirstY() {
+		return firstY;
+	}
+
+	public int getAngle() {
+		return angle;
+	}
+
+	public int getForce() {
+		return force;
+	}
+
+	public int getTime() {
+		return time;
+	}
+
+	public void setIMovementStrategy(IMovementStrategy movementStrategy) {
+		this.movementStrategy = movementStrategy;
+	}
+
 	public void move(int gravity) {
 		time++;
-		// x = x0 + v0*t*cos(alpha)
-		x = (int) (this.firstX + force * time / 10 * Math.cos(Math.toRadians(angle)));
-		// y = y0 + v0*t*sin(alpha) - 1/2*g*t^2
-		y = (int) (this.firstY - (force * time / 10 * Math.sin(Math.toRadians(angle))) + (0.5 * gravity * time / 10 * time / 10));
+		Coordinates coordinates = movementStrategy.move(gravity, this);
+		x = coordinates.getX();
+		y = coordinates.getY();
 	}
 
 	public boolean isVisible() {

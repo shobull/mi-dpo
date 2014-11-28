@@ -3,7 +3,8 @@ package cz.fit.dpo.mvcshooter;
 import cz.fit.dpo.mvcshooter.controller.Controller;
 import cz.fit.dpo.mvcshooter.model.Model;
 import cz.fit.dpo.mvcshooter.view.MainWindow;
-import javax.swing.SwingUtilities;
+
+import javax.swing.*;
 
 /**
  *
