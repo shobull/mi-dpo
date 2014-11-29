@@ -57,6 +57,15 @@ public class GraphicsDrawer {
 
 	public void drawEnemy(Graphics g, Enemy enemy) {
 		BufferedImage chosenEnemyImage = enemy.getType() == 0 ? enemyImage1 : enemyImage2;
+//		BufferedImage chosenEnemyImage = null;
+//		if (enemy.getType() == 0) {
+//			chosenEnemyImage = enemyImage1;
+//		} else if (enemy.getType() == 1) {
+//			chosenEnemyImage = enemyImage2;
+//		} else if (enemy.getType() == 2) {
+//			chosenEnemyImage = collisionImage;
+//		}
+
 		g.drawImage(chosenEnemyImage,
 				enemy.getX(),
 				enemy.getY(), null);

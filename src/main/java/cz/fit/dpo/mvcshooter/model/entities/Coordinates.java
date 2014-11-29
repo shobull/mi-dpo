@@ -1,16 +1,15 @@
 package cz.fit.dpo.mvcshooter.model.entities;
 
 /**
- * Created by lubos on 28.11.2014.
+ * Entita pro souradnice
+ *
+ * @author Lubos Palisek
  */
 public class Coordinates {
 
 	private int x;
 
 	private int y;
-
-	public Coordinates() {
-	}
 
 	public Coordinates(int x, int y) {
 		this.x = x;

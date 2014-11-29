@@ -1,17 +1,30 @@
 package cz.fit.dpo.mvcshooter.model.abstractfactory;
 
+import cz.fit.dpo.mvcshooter.model.entities.Missile;
+import cz.fit.dpo.mvcshooter.model.strategy.RealisticMovementStrategy;
+
 /**
- * Created by lubos on 28.11.2014.
+ * Vzor AbstractFactory - implementace zakladni factory, ktera vytvari real objekty:
+ * - pohybujici se nepratele
+ * - strely s rovnym smerem
+ *
+ * @author Lubos Palisek
  */
 public class RealFactory implements IBasicFactory {
 
-	@Override
-	public void createEnemy() {
-
+	public RealFactory() {
 	}
 
 	@Override
-	public void createMissile() {
+	public RealEnemy createEnemy(int x, int y) {
+		return new RealEnemy(x, y);
+	}
 
+	@Override
+	public Missile createMissile(int firstX, int firstY, int angle, int force) {
+		Missile missile = new Missile(firstX, firstY, angle, force);
+		// Navrhovy vzor Strategy - klient si zvoli, jaka strategie se pouzije
+		missile.setIMovementStrategy(new RealisticMovementStrategy());
+		return missile;
 	}
 }

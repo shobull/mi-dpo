@@ -1,36 +1,32 @@
 package cz.fit.dpo.mvcshooter.model.entities;
 
+import cz.fit.dpo.mvcshooter.model.ModelConfig;
+
 /**
- * User: Lubos Palisek
- * Date: 18. 10. 2014
+ * Zakladni abstraktni entita pro nepratele. Implementuje chovani, ktere je stejne pro oba typy nepratel
+ *
+ * @author Lubos Palisek
  */
-public class Enemy extends GameObject {
+public abstract class Enemy extends GameObject {
 
 	/**
-	 * image of enemy
+	 * Obrazek nepritele
 	 */
 	private int type;
 
-	/**
-	 * Remaining time of life
-	 */
-	private int remainingTime;
+	protected int time = 1;
 
 	public Enemy(int x, int y) {
 		super(x, y);
 		this.type = (int) Math.round(Math.random());
-		this.remainingTime = 3;
 	}
+
+	public abstract void move();
+
+	public abstract boolean isVisible();
 
 	public int getType() {
 		return type;
 	}
 
-	public void decreaseRemainingTime() {
-		this.remainingTime--;
-	}
-
-	public boolean isAlive() {
-		return this.remainingTime >= 0;
-	}
 }

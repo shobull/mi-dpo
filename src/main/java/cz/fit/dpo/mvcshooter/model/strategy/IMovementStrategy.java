@@ -4,7 +4,7 @@ import cz.fit.dpo.mvcshooter.model.entities.Coordinates;
 import cz.fit.dpo.mvcshooter.model.entities.Missile;
 
 /**
- * Trida pro navrhovy vzor Strategy - ovlivnuje let strely
+ * Vzor Strategy - interface definujici funkce pro pohyb strely
  *
  * @author Lubos Palisek
  */

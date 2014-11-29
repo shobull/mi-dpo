@@ -1,10 +1,10 @@
 package cz.fit.dpo.mvcshooter.model;
 
+import cz.fit.dpo.mvcshooter.model.abstractfactory.IBasicFactory;
 import cz.fit.dpo.mvcshooter.model.entities.Cannon;
 import cz.fit.dpo.mvcshooter.model.entities.Collision;
 import cz.fit.dpo.mvcshooter.model.entities.Enemy;
 import cz.fit.dpo.mvcshooter.model.entities.Missile;
-import cz.fit.dpo.mvcshooter.model.strategy.RealisticMovementStrategy;
 
 import java.util.*;
 
@@ -29,7 +29,10 @@ public class Model {
 
 	private List<Missile> missiles = new ArrayList<Missile>();
 
-	public Model() {
+	private IBasicFactory factory;
+
+	public Model(IBasicFactory factory) {
+		this.factory = factory;
 		initTimer();
 		initDefaultObjects();
 	}
@@ -75,21 +78,10 @@ public class Model {
 		generatedX = (int) (Math.random() * (ModelConfig.PLAYGROUND_WIDTH - 100)) + 100;
 		generatedY = (int) (Math.random() * ModelConfig.PLAYGROUND_HEIGHT);
 
-		enemies.add(new Enemy(generatedX, generatedY));
+		// Vytvareni nepritele na zaklade vzoru AbstractFactory
+		Enemy enemy = factory.createEnemy(generatedX, generatedY);
+		enemies.add(enemy);
 		notifyObservers();
-	}
-
-	/**
-	 * Odstrani nepratele, kterym vyprsel cas pro zivot
-	 */
-	private void removeDeadEnemies() {
-		for (Iterator<Enemy> enemyIterator = enemies.iterator(); enemyIterator.hasNext(); ) {
-			Enemy enemy = enemyIterator.next();
-			enemy.decreaseRemainingTime();
-			if (!enemy.isAlive()) {
-				enemyIterator.remove();
-			}
-		}
 	}
 
 	private void removeCollisions() {
@@ -103,14 +95,13 @@ public class Model {
 	}
 
 	public void shootMissile() {
-		Missile missile = new Missile(cannon.getX(), cannon.getY(), cannon.getAngle(), cannon.getForce());
-		// Navrhovy vzor Strategy - klient si zvoli, jaka strategie se pouzije
-		missile.setIMovementStrategy(new RealisticMovementStrategy());
-		missiles.add(missile);
+		ArrayList<Missile> newMissiles = cannon.shootMissile(factory);
+		missiles.addAll(newMissiles);
 		notifyObservers();
 	}
 
 	public void changeShootingMode() {
+		// Zmena vnitrniho stavu Cannon (vzor State)
 		cannon.changeShootingMode();
 	}
 
@@ -152,10 +143,10 @@ public class Model {
 				moveObjects();
 			}
 		}, 0, ModelConfig.TICK_TIME);
+
 		timer.schedule(new TimerTask() {
 			@Override
 			public void run() {
-				removeDeadEnemies();
 				addNewEnemy();
 			}
 		}, 0, 5000);
@@ -174,8 +165,8 @@ public class Model {
 
 	// ################################## private logic ##################################
 	private void moveObjects() {
-		// todo implement
 		refreshMissiles();
+		refreshEnemies();
 		checkCollisions();
 
 		notifyObservers();
@@ -195,6 +186,21 @@ public class Model {
 					missileIterator.remove();
 				}
 			}
+		}
+	}
+
+	private void refreshEnemies() {
+		boolean removed = false;
+		for (Iterator<Enemy> it = enemies.iterator(); it.hasNext(); ) {
+			Enemy enemy = it.next();
+			enemy.move();
+			if (!enemy.isVisible()) {
+				it.remove();
+				removed = true;
+			}
+		}
+		if (removed) {
+			addNewEnemy();
 		}
 	}
 

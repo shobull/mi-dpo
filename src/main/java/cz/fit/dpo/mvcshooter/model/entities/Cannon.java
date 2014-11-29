@@ -1,10 +1,13 @@
 package cz.fit.dpo.mvcshooter.model.entities;
 
 import cz.fit.dpo.mvcshooter.model.ModelConfig;
+import cz.fit.dpo.mvcshooter.model.abstractfactory.IBasicFactory;
 import cz.fit.dpo.mvcshooter.model.enums.ECannonMode;
 import cz.fit.dpo.mvcshooter.model.state.DoubleShootingState;
 import cz.fit.dpo.mvcshooter.model.state.IShootingState;
 import cz.fit.dpo.mvcshooter.model.state.SingleShootingState;
+
+import java.util.ArrayList;
 
 /**
  * @author Ondrej Stuchlik
@@ -15,13 +18,12 @@ public class Cannon extends GameObject {
 
 	private int force = ModelConfig.CANNON_DEFAULT_FORCE;
 
-	private ECannonMode mode;
+	private ECannonMode mode = ECannonMode.SINGLE_SHOOTING_MODE;
 
-	private IShootingState shootingState;
+	private IShootingState shootingState = new SingleShootingState();
 
 	public Cannon() {
 		super(ModelConfig.CANNON_X, ModelConfig.CANNON_DEFAULT_Y);
-		mode = ECannonMode.SINGLE_SHOOTING_MODE;
 	}
 
 	public void moveUp() {
@@ -72,8 +74,8 @@ public class Cannon extends GameObject {
 		System.out.println("Sila kanonu nastavena na " + force + ".");
 	}
 
-	public void shootMissile() {
-		this.shootingState.shootMissile();
+	public ArrayList<Missile> shootMissile(IBasicFactory factory) {
+		return this.shootingState.shootMissile(this, factory);
 	}
 
 	public void changeShootingMode() {

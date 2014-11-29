@@ -4,7 +4,9 @@ import cz.fit.dpo.mvcshooter.model.entities.Coordinates;
 import cz.fit.dpo.mvcshooter.model.entities.Missile;
 
 /**
- * Created by lubos on 28.11.2014.
+ * Vzor Strategy - implementace realistickeho pohybu (rovna strela)
+ *
+ * @author Lubos Palisek
  */
 public class RealisticMovementStrategy implements IMovementStrategy {
 
@@ -14,7 +16,8 @@ public class RealisticMovementStrategy implements IMovementStrategy {
 
 	@Override
 	public Coordinates move(int gravity, Missile missile) {
-		int x = missile.getFirstX() + (missile.getTime() / 2) * missile.getFirstX();
+		int force = (missile.getForce() / 4) == 0 ? 1 : (missile.getForce() / 4);
+		int x = missile.getFirstX() + (missile.getTime() * force);
 		int y = missile.getFirstY();
 		return new Coordinates(x, y);
 	}

@@ -4,8 +4,9 @@ import cz.fit.dpo.mvcshooter.model.ModelConfig;
 import cz.fit.dpo.mvcshooter.model.strategy.IMovementStrategy;
 
 /**
- * User: Lubos Palisek
- * Date: 18. 10. 2014
+ * Entita pro strelu
+ *
+ * @author Lubos Palisek
  */
 public class Missile extends GameObject {
 

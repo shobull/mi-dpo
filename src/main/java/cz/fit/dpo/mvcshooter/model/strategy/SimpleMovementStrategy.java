@@ -4,7 +4,9 @@ import cz.fit.dpo.mvcshooter.model.entities.Coordinates;
 import cz.fit.dpo.mvcshooter.model.entities.Missile;
 
 /**
- * Created by lubos on 28.11.2014.
+ * Vzor Strategy - implementace pohybu strely jako sikmy vrh
+ *
+ * @author Lubos Palisek
  */
 public class SimpleMovementStrategy implements IMovementStrategy {
 

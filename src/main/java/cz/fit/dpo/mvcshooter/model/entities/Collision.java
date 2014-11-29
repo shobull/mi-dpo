@@ -1,16 +1,14 @@
 package cz.fit.dpo.mvcshooter.model.entities;
 
 /**
- * User: Lubos Palisek
- * Date: 18. 10. 2014
+ * @author Lubos Palisek
  */
 public class Collision extends GameObject {
 
-	private int remainingTime;
+	private int remainingTime = 3;
 
 	public Collision(int x, int y) {
 		super(x, y);
-		this.remainingTime = 3;
 	}
 
 	public void decreaseRemainingTime() {
