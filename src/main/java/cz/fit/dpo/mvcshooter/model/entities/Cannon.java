@@ -88,4 +88,13 @@ public class Cannon extends GameObject {
 		}
 		System.out.println("Zmena shooting mode na: " + this.mode);
 	}
+
+	@Override
+	public String toString() {
+		return "Cannon{" +
+				"angle=" + angle +
+				", force=" + force +
+				", shootingState=" + shootingState +
+				'}';
+	}
 }

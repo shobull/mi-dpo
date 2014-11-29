@@ -17,13 +17,23 @@ public class RealEnemy extends Enemy {
 	/**
 	 * Primitivni implementace padajiciho pohybu
 	 */
+	@Override
 	public void move() {
 		time++;
 		y = 0 + time;
 	}
 
+	@Override
 	public boolean isVisible() {
 		return y <= ModelConfig.PLAYGROUND_HEIGHT && x <= ModelConfig.PLAYGROUND_WIDTH;
+	}
+
+	@Override
+	public Enemy copy() {
+		RealEnemy re = new RealEnemy(x, y);
+		re.setTime(time);
+		re.setType(type);
+		return re;
 	}
 
 }

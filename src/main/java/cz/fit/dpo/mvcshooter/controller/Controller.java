@@ -1,6 +1,7 @@
 package cz.fit.dpo.mvcshooter.controller;
 
 import cz.fit.dpo.mvcshooter.model.Model;
+import cz.fit.dpo.mvcshooter.model.memento.Caretaker;
 import cz.fit.dpo.mvcshooter.view.MainWindow;
 
 import java.awt.event.KeyEvent;
@@ -13,6 +14,8 @@ public class Controller {
 	private Model model;
 
 	private MainWindow view;
+
+	private Caretaker caretaker = new Caretaker();
 
 	public Controller(Model model) {
 		this.model = model;
@@ -41,7 +44,12 @@ public class Controller {
 			case KeyEvent.VK_F1:
 				view.showHelp();
 				break;
-
+			case KeyEvent.VK_F5:
+				caretaker.saveState(model);
+				break;
+			case KeyEvent.VK_F6:
+				caretaker.restoreState(model);
+				break;
 			default:
 				if ('+' == evt.getKeyChar()) {
 					model.forceUp();

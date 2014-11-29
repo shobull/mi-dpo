@@ -12,7 +12,7 @@ public abstract class Enemy extends GameObject {
 	/**
 	 * Obrazek nepritele
 	 */
-	private int type;
+	protected int type;
 
 	protected int time = 1;
 
@@ -21,12 +21,29 @@ public abstract class Enemy extends GameObject {
 		this.type = (int) Math.round(Math.random());
 	}
 
-	public abstract void move();
-
-	public abstract boolean isVisible();
-
 	public int getType() {
 		return type;
 	}
 
+	public void setType(int type) {
+		this.type = type;
+	}
+
+	public void setTime(int time) {
+		this.time = time;
+	}
+
+	public abstract void move();
+
+	public abstract boolean isVisible();
+
+	public abstract Enemy copy();
+
+	@Override
+	public String toString() {
+		return "Enemy{" +
+				"type=" + type +
+				", time=" + time +
+				'}';
+	}
 }

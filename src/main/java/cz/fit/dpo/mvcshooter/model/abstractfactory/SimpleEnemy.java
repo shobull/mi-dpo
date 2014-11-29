@@ -15,15 +15,30 @@ public class SimpleEnemy extends Enemy {
 		super(x, y);
 	}
 
+	public void setRemainingTime(int remainingTime) {
+		this.remainingTime = remainingTime;
+	}
+
 	/**
 	 * Implementace stani na miste :-)
 	 */
+	@Override
 	public void move() {
 		remainingTime--;
 	}
 
+	@Override
 	public boolean isVisible() {
 		return remainingTime >= 0;
+	}
+
+	@Override
+	public Enemy copy() {
+		SimpleEnemy se = new SimpleEnemy(x, y);
+		se.setTime(time);
+		se.setType(type);
+		se.setRemainingTime(remainingTime);
+		return se;
 	}
 
 }

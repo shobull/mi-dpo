@@ -27,4 +27,11 @@ public abstract class GameObject {
 				&& Math.abs(this.y - anotherObject.y) < ModelConfig.COLLISION_MARGIN;
 	}
 
+	@Override
+	public String toString() {
+		return "GameObject{" +
+				"x=" + x +
+				", y=" + y +
+				'}';
+	}
 }

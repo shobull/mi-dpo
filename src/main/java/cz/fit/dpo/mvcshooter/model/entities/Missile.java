@@ -54,6 +54,10 @@ public class Missile extends GameObject {
 		this.movementStrategy = movementStrategy;
 	}
 
+	public void setTime(int time) {
+		this.time = time;
+	}
+
 	public void move(int gravity) {
 		time++;
 		Coordinates coordinates = movementStrategy.move(gravity, this);
@@ -63,5 +67,23 @@ public class Missile extends GameObject {
 
 	public boolean isVisible() {
 		return y <= ModelConfig.PLAYGROUND_HEIGHT && x <= ModelConfig.PLAYGROUND_WIDTH;
+	}
+
+	public Missile copy() {
+		Missile missile = new Missile(x, y, angle, force);
+		missile.setTime(time);
+		missile.setIMovementStrategy(movementStrategy);
+		return missile;
+	}
+
+	@Override
+	public String toString() {
+		return "Missile{" +
+				"firstX=" + firstX +
+				", firstY=" + firstY +
+				", angle=" + angle +
+				", force=" + force +
+				", time=" + time +
+				'}';
 	}
 }

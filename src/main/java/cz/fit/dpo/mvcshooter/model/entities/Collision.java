@@ -11,11 +11,28 @@ public class Collision extends GameObject {
 		super(x, y);
 	}
 
+	public void setRemainingTime(int remainingTime) {
+		this.remainingTime = remainingTime;
+	}
+
 	public void decreaseRemainingTime() {
 		this.remainingTime--;
 	}
 
 	public boolean isVisible() {
 		return this.remainingTime >= 0;
+	}
+
+	public Collision copy() {
+		Collision collision = new Collision(x, y);
+		collision.setRemainingTime(remainingTime);
+		return collision;
+	}
+
+	@Override
+	public String toString() {
+		return "Collision{" +
+				"remainingTime=" + remainingTime +
+				'}';
 	}
 }
