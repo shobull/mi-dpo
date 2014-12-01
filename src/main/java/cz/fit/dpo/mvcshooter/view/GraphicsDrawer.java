@@ -4,6 +4,7 @@ import cz.fit.dpo.mvcshooter.model.entities.Cannon;
 import cz.fit.dpo.mvcshooter.model.entities.Collision;
 import cz.fit.dpo.mvcshooter.model.entities.Enemy;
 import cz.fit.dpo.mvcshooter.model.entities.Missile;
+import cz.fit.dpo.mvcshooter.model.visitor.IVisitor;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -13,7 +14,7 @@ import java.io.IOException;
 /**
  * @author Ondrej Stuchlik
  */
-public class GraphicsDrawer {
+public class GraphicsDrawer implements IVisitor {
 
 	private static final int INFO_X = 5;
 
@@ -29,6 +30,8 @@ public class GraphicsDrawer {
 
 	private BufferedImage collisionImage;
 
+	private Graphics g;
+
 
 	public GraphicsDrawer() {
 		try {
@@ -43,41 +46,38 @@ public class GraphicsDrawer {
 	}
 
 
-	public void drawCannon(Graphics g, Cannon cannon) {
-		g.drawImage(cannonImage,
-				cannon.getX() - cannonImage.getWidth() / 2,
-				cannon.getY(), null);
+	public void setGraphics(Graphics graphics) {
+		this.g = graphics;
 	}
 
-	public void drawMissile(Graphics g, Missile missile) {
+	@Override
+	public void visit(Missile missile) {
 		g.drawImage(missileImage,
 				missile.getX(),
 				missile.getY(), null);
 	}
 
-	public void drawEnemy(Graphics g, Enemy enemy) {
+	@Override
+	public void visit(Enemy enemy) {
 		BufferedImage chosenEnemyImage = enemy.getType() == 0 ? enemyImage1 : enemyImage2;
-//		BufferedImage chosenEnemyImage = null;
-//		if (enemy.getType() == 0) {
-//			chosenEnemyImage = enemyImage1;
-//		} else if (enemy.getType() == 1) {
-//			chosenEnemyImage = enemyImage2;
-//		} else if (enemy.getType() == 2) {
-//			chosenEnemyImage = collisionImage;
-//		}
 
 		g.drawImage(chosenEnemyImage,
 				enemy.getX(),
 				enemy.getY(), null);
 	}
 
-	public void drawCollision(Graphics g, Collision collision) {
+	@Override
+	public void visit(Cannon cannon) {
+		g.drawImage(cannonImage,
+				cannon.getX() - cannonImage.getWidth() / 2,
+				cannon.getY(), null);
+	}
+
+	@Override
+	public void visit(Collision collision) {
 		g.drawImage(collisionImage,
 				collision.getX(),
 				collision.getY(), null);
-	}
-
-	public void drawInfo(Graphics g, ModelInfo info) {
 
 	}
 

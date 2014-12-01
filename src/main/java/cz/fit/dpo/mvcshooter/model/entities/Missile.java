@@ -2,6 +2,7 @@ package cz.fit.dpo.mvcshooter.model.entities;
 
 import cz.fit.dpo.mvcshooter.model.ModelConfig;
 import cz.fit.dpo.mvcshooter.model.strategy.IMovementStrategy;
+import cz.fit.dpo.mvcshooter.model.visitor.IVisitor;
 
 /**
  * Entita pro strelu
@@ -70,10 +71,15 @@ public class Missile extends GameObject {
 	}
 
 	public Missile copy() {
-		Missile missile = new Missile(x, y, angle, force);
+		Missile missile = new Missile(firstX, firstY, angle, force);
 		missile.setTime(time);
 		missile.setIMovementStrategy(movementStrategy);
 		return missile;
+	}
+
+	@Override
+	public void accept(IVisitor visitor) {
+		visitor.visit(this);
 	}
 
 	@Override

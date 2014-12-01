@@ -1,11 +1,13 @@
 package cz.fit.dpo.mvcshooter.model.entities;
 
 import cz.fit.dpo.mvcshooter.model.ModelConfig;
+import cz.fit.dpo.mvcshooter.model.visitor.IAcceptable;
+import cz.fit.dpo.mvcshooter.model.visitor.IVisitor;
 
 /**
  * @author Ondrej Stuchlik
  */
-public abstract class GameObject {
+public abstract class GameObject implements IAcceptable {
 
 	protected int x, y;
 
@@ -26,6 +28,8 @@ public abstract class GameObject {
 		return Math.abs(this.x - anotherObject.x) < ModelConfig.COLLISION_MARGIN
 				&& Math.abs(this.y - anotherObject.y) < ModelConfig.COLLISION_MARGIN;
 	}
+
+	public abstract void accept(IVisitor visitor);
 
 	@Override
 	public String toString() {

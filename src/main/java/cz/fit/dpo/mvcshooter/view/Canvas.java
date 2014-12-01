@@ -2,9 +2,7 @@ package cz.fit.dpo.mvcshooter.view;
 
 import cz.fit.dpo.mvcshooter.model.Model;
 import cz.fit.dpo.mvcshooter.model.ModelObserver;
-import cz.fit.dpo.mvcshooter.model.entities.Collision;
-import cz.fit.dpo.mvcshooter.model.entities.Enemy;
-import cz.fit.dpo.mvcshooter.model.entities.Missile;
+import cz.fit.dpo.mvcshooter.model.entities.GameObject;
 
 import javax.swing.*;
 import java.awt.*;
@@ -36,19 +34,10 @@ public class Canvas extends JPanel implements ModelObserver {
 	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
+		drawer.setGraphics(g);
 
-		drawer.drawCannon(g, model.getCannon());
-
-		for (Enemy e : model.getEnemies()) {
-			drawer.drawEnemy(g, e);
-		}
-
-		for (Missile m : model.getMissiles()) {
-			drawer.drawMissile(g, m);
-		}
-
-		for (Collision c : model.getCollisions()) {
-			drawer.drawCollision(g, c);
+		for (GameObject go : model.getAllGameObjects()) {
+			go.accept(drawer);
 		}
 	}
 

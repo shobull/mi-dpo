@@ -1,6 +1,6 @@
 package cz.fit.dpo.mvcshooter.model.entities;
 
-import cz.fit.dpo.mvcshooter.model.ModelConfig;
+import cz.fit.dpo.mvcshooter.model.visitor.IVisitor;
 
 /**
  * Zakladni abstraktni entita pro nepratele. Implementuje chovani, ktere je stejne pro oba typy nepratel
@@ -38,6 +38,12 @@ public abstract class Enemy extends GameObject {
 	public abstract boolean isVisible();
 
 	public abstract Enemy copy();
+
+
+	@Override
+	public void accept(IVisitor visitor) {
+		visitor.visit(this);
+	}
 
 	@Override
 	public String toString() {

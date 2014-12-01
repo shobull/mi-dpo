@@ -6,6 +6,7 @@ import cz.fit.dpo.mvcshooter.model.enums.ECannonMode;
 import cz.fit.dpo.mvcshooter.model.state.DoubleShootingState;
 import cz.fit.dpo.mvcshooter.model.state.IShootingState;
 import cz.fit.dpo.mvcshooter.model.state.SingleShootingState;
+import cz.fit.dpo.mvcshooter.model.visitor.IVisitor;
 
 import java.util.ArrayList;
 
@@ -87,6 +88,11 @@ public class Cannon extends GameObject {
 			this.shootingState = new SingleShootingState();
 		}
 		System.out.println("Zmena shooting mode na: " + this.mode);
+	}
+
+	@Override
+	public void accept(IVisitor visitor) {
+		visitor.visit(this);
 	}
 
 	@Override

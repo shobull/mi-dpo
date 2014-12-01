@@ -1,10 +1,7 @@
 package cz.fit.dpo.mvcshooter.model;
 
 import cz.fit.dpo.mvcshooter.model.abstractfactory.IBasicFactory;
-import cz.fit.dpo.mvcshooter.model.entities.Cannon;
-import cz.fit.dpo.mvcshooter.model.entities.Collision;
-import cz.fit.dpo.mvcshooter.model.entities.Enemy;
-import cz.fit.dpo.mvcshooter.model.entities.Missile;
+import cz.fit.dpo.mvcshooter.model.entities.*;
 import cz.fit.dpo.mvcshooter.model.memento.ModelMemento;
 
 import java.util.*;
@@ -79,6 +76,7 @@ public class Model {
 	}
 
 	public ModelMemento saveToMemento() {
+		System.out.println("Ukladam hru. (" + this + ")");
 		return new ModelMemento(this);
 	}
 
@@ -140,6 +138,15 @@ public class Model {
 
 	public int getScore() {
 		return score;
+	}
+
+	public List<GameObject> getAllGameObjects() {
+		List<GameObject> gameObjects = new ArrayList<GameObject>();
+		gameObjects.add(cannon);
+		gameObjects.addAll(collisions);
+		gameObjects.addAll(missiles);
+		gameObjects.addAll(enemies);
+		return gameObjects;
 	}
 
 	public void setEnemies(List<Enemy> enemies) {

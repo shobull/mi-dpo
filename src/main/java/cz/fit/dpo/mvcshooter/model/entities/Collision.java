@@ -1,5 +1,7 @@
 package cz.fit.dpo.mvcshooter.model.entities;
 
+import cz.fit.dpo.mvcshooter.model.visitor.IVisitor;
+
 /**
  * @author Lubos Palisek
  */
@@ -27,6 +29,11 @@ public class Collision extends GameObject {
 		Collision collision = new Collision(x, y);
 		collision.setRemainingTime(remainingTime);
 		return collision;
+	}
+
+	@Override
+	public void accept(IVisitor visitor) {
+		visitor.visit(this);
 	}
 
 	@Override
