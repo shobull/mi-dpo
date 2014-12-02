@@ -1,5 +1,6 @@
 package cz.fit.dpo.mvcshooter.model.abstractfactory;
 
+import cz.fit.dpo.mvcshooter.model.ModelConfig;
 import cz.fit.dpo.mvcshooter.model.entities.Enemy;
 
 /**
@@ -9,7 +10,7 @@ import cz.fit.dpo.mvcshooter.model.entities.Enemy;
  */
 public class SimpleEnemy extends Enemy {
 
-	protected int remainingTime = 250;
+	protected int remainingTime = ModelConfig.ENEMY_LIVE_TIME;
 
 	public SimpleEnemy(int x, int y) {
 		super(x, y);

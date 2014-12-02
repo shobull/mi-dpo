@@ -2,8 +2,10 @@ package cz.fit.dpo.mvcshooter.model;
 
 import cz.fit.dpo.mvcshooter.model.abstractfactory.IBasicFactory;
 import cz.fit.dpo.mvcshooter.model.entities.*;
+import cz.fit.dpo.mvcshooter.model.enums.ECannonMode;
 import cz.fit.dpo.mvcshooter.model.memento.ModelMemento;
 
+import java.time.LocalTime;
 import java.util.*;
 
 /**
@@ -29,7 +31,9 @@ public class Model {
 
 	private int gravity = ModelConfig.DEFAULT_GRAVITY;
 
-	private int score = 0;
+	private GameStats gameStats;
+
+	private int timeTicks = 0;
 
 	public Model(IBasicFactory factory) {
 		this.factory = factory;
@@ -39,21 +43,21 @@ public class Model {
 
 	// ####################### model controlling #########################
 	public void moveCannonUp() {
-		cannon.moveUp();
+		getCannon().moveUp();
 		notifyObservers();
 	}
 
 	public void moveCannonDown() {
-		cannon.moveDown();
+		getCannon().moveDown();
 		notifyObservers();
 	}
 
 	public void angleUp() {
-		cannon.angleUp();
+		getCannon().angleUp();
 	}
 
 	public void angleDown() {
-		cannon.angleDown();
+		getCannon().angleDown();
 	}
 
 	public void forceUp() {
@@ -62,6 +66,14 @@ public class Model {
 
 	public void forceDown() {
 		cannon.forceDown();
+	}
+
+	public void gravityUp() {
+		gravity += ModelConfig.GRAVITY_STEP;
+	}
+
+	public void gravityDown() {
+		gravity -= ModelConfig.GRAVITY_STEP;
 	}
 
 	public void shootMissile() {
@@ -97,8 +109,8 @@ public class Model {
 			this.missiles.add(resotredMissile);
 		}
 
+		this.gameStats = modelMemento.getGameStats().copy();
 		this.gravity = modelMemento.getGravity();
-		this.score = modelMemento.getScore();
 
 		System.out.println("Obnovuji stav hry. (" + this + ")");
 	}
@@ -124,6 +136,10 @@ public class Model {
 		return collisions;
 	}
 
+	public GameStats getGameStats() {
+		return gameStats;
+	}
+
 	public int getPlaygroundWidth() {
 		return ModelConfig.PLAYGROUND_WIDTH;
 	}
@@ -136,37 +152,36 @@ public class Model {
 		return gravity;
 	}
 
-	public int getScore() {
-		return score;
+	public IBasicFactory getFactory() {
+		return factory;
+	}
+
+	public int getTimeTicks() {
+		return timeTicks;
+	}
+
+	public String getTimeString() {
+		return LocalTime.MIN.plusSeconds(timeTicks).toString();
+	}
+
+	public String getCannonStateString() {
+		if (cannon.getMode().equals(ECannonMode.DOUBLE_SHOOTING_MODE)) {
+			return "DOUBLE_SHOOTING_MODE";
+		} else if (cannon.getMode().equals(ECannonMode.SINGLE_SHOOTING_MODE)) {
+			return "SINGLE_SHOOTING_MODE";
+		} else {
+			return "-nenastaveno-";
+		}
 	}
 
 	public List<GameObject> getAllGameObjects() {
 		List<GameObject> gameObjects = new ArrayList<GameObject>();
-		gameObjects.add(cannon);
-		gameObjects.addAll(collisions);
-		gameObjects.addAll(missiles);
-		gameObjects.addAll(enemies);
+		gameObjects.add(getCannon());
+		gameObjects.addAll(getCollisions());
+		gameObjects.addAll(getMissiles());
+		gameObjects.addAll(getEnemies());
+		gameObjects.add(getGameStats());
 		return gameObjects;
-	}
-
-	public void setEnemies(List<Enemy> enemies) {
-		this.enemies = enemies;
-	}
-
-	public void setCollisions(List<Collision> collisions) {
-		this.collisions = collisions;
-	}
-
-	public void setMissiles(List<Missile> missiles) {
-		this.missiles = missiles;
-	}
-
-	public void setGravity(int gravity) {
-		this.gravity = gravity;
-	}
-
-	public void setScore(int score) {
-		this.score = score;
 	}
 
 	// ############################### private initialization ###############################
@@ -189,19 +204,21 @@ public class Model {
 		timer.schedule(new TimerTask() {
 			@Override
 			public void run() {
-				removeCollisions();
+				timeTicks++;
 			}
 		}, 0, 1000);
 	}
 
 	private void initDefaultObjects() {
 		cannon = new Cannon();
+		gameStats = new GameStats(this);
 	}
 
 	// ################################## private logic ##################################
 	private void moveObjects() {
 		refreshMissiles();
 		refreshEnemies();
+		refreshCollisions();
 		checkCollisions();
 
 		notifyObservers();
@@ -216,10 +233,20 @@ public class Model {
 
 				if (missile.collidesWith(enemy)) {
 					collisions.add(new Collision(enemy.getX(), enemy.getY()));
-					score++;
+					gameStats.addScore();
 					enemyIterator.remove();
 					missileIterator.remove();
 				}
+			}
+		}
+	}
+
+	private void refreshCollisions() {
+		for (Iterator<Collision> collisionIterator = collisions.iterator(); collisionIterator.hasNext(); ) {
+			Collision collision = collisionIterator.next();
+			collision.decreaseRemainingTime();
+			if (!collision.isVisible()) {
+				collisionIterator.remove();
 			}
 		}
 	}
@@ -244,6 +271,7 @@ public class Model {
 			Missile missile = it.next();
 			missile.move(gravity);
 			if (!missile.isVisible()) {
+				gameStats.minusScore();
 				it.remove();
 			}
 		}
@@ -269,16 +297,6 @@ public class Model {
 		notifyObservers();
 	}
 
-	private void removeCollisions() {
-		for (Iterator<Collision> collisionIterator = collisions.iterator(); collisionIterator.hasNext(); ) {
-			Collision collision = collisionIterator.next();
-			collision.decreaseRemainingTime();
-			if (!collision.isVisible()) {
-				collisionIterator.remove();
-			}
-		}
-	}
-
 	private void notifyObservers() {
 		for (ModelObserver obs : observers) {
 			obs.modelUpdated();
@@ -292,7 +310,6 @@ public class Model {
 				", collisions=" + collisions.size() +
 				", missiles=" + missiles.size() +
 				", gravity=" + gravity +
-				", score=" + score +
 				'}';
 	}
 }

@@ -17,6 +17,10 @@ public class ModelConfig {
 
 	public static final int HIT_POINTS = 10;
 
+	public static final int INFO_X = 5;
+
+	public static final int INFO_Y = 15;
+
 
 	// ########### cannon ##########
 	// cannon moves just vertically, therefore x doesn't change
@@ -45,7 +49,6 @@ public class ModelConfig {
 	public static final int CANNON_MIN_FORCE = 1;
 
 	public static final int CANNON_FORCE_STEP = 1;
-
 
 	// ########### missiles ##########
 

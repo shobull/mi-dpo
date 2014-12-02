@@ -32,6 +32,19 @@ public abstract class GameObject implements IAcceptable {
 	public abstract void accept(IVisitor visitor);
 
 	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+
+		GameObject that = (GameObject) o;
+
+		if (x != that.x) return false;
+		if (y != that.y) return false;
+
+		return true;
+	}
+
+	@Override
 	public String toString() {
 		return "GameObject{" +
 				"x=" + x +

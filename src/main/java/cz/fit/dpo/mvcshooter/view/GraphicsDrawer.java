@@ -1,9 +1,6 @@
 package cz.fit.dpo.mvcshooter.view;
 
-import cz.fit.dpo.mvcshooter.model.entities.Cannon;
-import cz.fit.dpo.mvcshooter.model.entities.Collision;
-import cz.fit.dpo.mvcshooter.model.entities.Enemy;
-import cz.fit.dpo.mvcshooter.model.entities.Missile;
+import cz.fit.dpo.mvcshooter.model.entities.*;
 import cz.fit.dpo.mvcshooter.model.visitor.IVisitor;
 
 import javax.imageio.ImageIO;
@@ -16,10 +13,6 @@ import java.io.IOException;
  */
 public class GraphicsDrawer implements IVisitor {
 
-	private static final int INFO_X = 5;
-
-	private static final int INFO_Y = 15;
-
 	private BufferedImage cannonImage;
 
 	private BufferedImage enemyImage1;
@@ -31,7 +24,6 @@ public class GraphicsDrawer implements IVisitor {
 	private BufferedImage collisionImage;
 
 	private Graphics g;
-
 
 	public GraphicsDrawer() {
 		try {
@@ -60,7 +52,6 @@ public class GraphicsDrawer implements IVisitor {
 	@Override
 	public void visit(Enemy enemy) {
 		BufferedImage chosenEnemyImage = enemy.getType() == 0 ? enemyImage1 : enemyImage2;
-
 		g.drawImage(chosenEnemyImage,
 				enemy.getX(),
 				enemy.getY(), null);
@@ -78,11 +69,12 @@ public class GraphicsDrawer implements IVisitor {
 		g.drawImage(collisionImage,
 				collision.getX(),
 				collision.getY(), null);
-
 	}
 
-	class ModelInfo {
-
+	@Override
+	public void visit(GameStats gameStats) {
+		g.drawString(gameStats.toString(),
+				gameStats.getX(),
+				gameStats.getY());
 	}
-
 }

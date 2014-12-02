@@ -2,15 +2,13 @@ package cz.fit.dpo.mvcshooter.model.memento;
 
 import cz.fit.dpo.mvcshooter.model.Model;
 import cz.fit.dpo.mvcshooter.model.ModelConfig;
-import cz.fit.dpo.mvcshooter.model.ModelObserver;
-import cz.fit.dpo.mvcshooter.model.entities.Cannon;
 import cz.fit.dpo.mvcshooter.model.entities.Collision;
 import cz.fit.dpo.mvcshooter.model.entities.Enemy;
+import cz.fit.dpo.mvcshooter.model.entities.GameStats;
 import cz.fit.dpo.mvcshooter.model.entities.Missile;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Timer;
 
 /**
  * Vzor Memento - kopie objektu Model, pro ukladani jeho stavu
@@ -27,7 +25,7 @@ public class ModelMemento {
 
 	private int gravity = ModelConfig.DEFAULT_GRAVITY;
 
-	private int score = 0;
+	private GameStats gameStats;
 
 	public ModelMemento(Model model) {
 		for (Enemy enemy : model.getEnemies()) {
@@ -40,10 +38,10 @@ public class ModelMemento {
 			this.missiles.add(missile.copy());
 		}
 
+		this.gameStats = model.getGameStats().copy();
 		this.gravity = model.getGravity();
-		this.score = model.getScore();
 
-		System.out.println("Stav hry ulozen. (" + model + ").");
+		System.out.println("Stav hry ulozen. (" + this.getGameStats().getScore() + ").");
 	}
 
 	public List<Enemy> getEnemies() {
@@ -62,7 +60,7 @@ public class ModelMemento {
 		return gravity;
 	}
 
-	public int getScore() {
-		return score;
+	public GameStats getGameStats() {
+		return gameStats;
 	}
 }

@@ -27,6 +27,22 @@ public class Cannon extends GameObject {
 		super(ModelConfig.CANNON_X, ModelConfig.CANNON_DEFAULT_Y);
 	}
 
+	public int getAngle() {
+		return angle;
+	}
+
+	public int getForce() {
+		return force;
+	}
+
+	public ECannonMode getMode() {
+		return mode;
+	}
+
+	public IShootingState getShootingState() {
+		return shootingState;
+	}
+
 	public void moveUp() {
 		if (y >= ModelConfig.CANNON_TOP_MARGIN) {
 			y -= ModelConfig.CANNON_MOVE_STEP;
@@ -39,40 +55,28 @@ public class Cannon extends GameObject {
 		}
 	}
 
-	public int getAngle() {
-		return angle;
-	}
-
-	public int getForce() {
-		return force;
-	}
-
 	public void angleUp() {
 		if (angle + ModelConfig.CANNON_AIM_STEP < ModelConfig.CANNON_MAX_UP_ANGLE) {
 			angle += ModelConfig.CANNON_AIM_STEP;
 		}
-		System.out.println("Kanon nastaven na " + angle + " st.");
 	}
 
 	public void angleDown() {
 		if (angle - ModelConfig.CANNON_AIM_STEP > ModelConfig.CANNON_MAX_DOWN_ANGLE) {
 			angle -= ModelConfig.CANNON_AIM_STEP;
 		}
-		System.out.println("Kanon nastaven na " + angle + " st.");
 	}
 
 	public void forceUp() {
 		if (force + ModelConfig.CANNON_FORCE_STEP <= ModelConfig.CANNON_MAX_FORCE) {
 			force += ModelConfig.CANNON_FORCE_STEP;
 		}
-		System.out.println("Sila kanonu nastavena na " + force + ".");
 	}
 
 	public void forceDown() {
 		if (force - ModelConfig.CANNON_FORCE_STEP >= ModelConfig.CANNON_MIN_FORCE) {
 			force -= ModelConfig.CANNON_FORCE_STEP;
 		}
-		System.out.println("Sila kanonu nastavena na " + force + ".");
 	}
 
 	public ArrayList<Missile> shootMissile(IBasicFactory factory) {
@@ -87,7 +91,6 @@ public class Cannon extends GameObject {
 			this.mode = ECannonMode.SINGLE_SHOOTING_MODE;
 			this.shootingState = new SingleShootingState();
 		}
-		System.out.println("Zmena shooting mode na: " + this.mode);
 	}
 
 	@Override

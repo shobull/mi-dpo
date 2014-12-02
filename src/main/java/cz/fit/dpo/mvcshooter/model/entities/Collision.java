@@ -1,5 +1,6 @@
 package cz.fit.dpo.mvcshooter.model.entities;
 
+import cz.fit.dpo.mvcshooter.model.ModelConfig;
 import cz.fit.dpo.mvcshooter.model.visitor.IVisitor;
 
 /**
@@ -7,7 +8,7 @@ import cz.fit.dpo.mvcshooter.model.visitor.IVisitor;
  */
 public class Collision extends GameObject {
 
-	private int remainingTime = 3;
+	private int remainingTime = ModelConfig.COLLISION_LIVE_TIME;
 
 	public Collision(int x, int y) {
 		super(x, y);

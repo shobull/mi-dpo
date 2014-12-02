@@ -22,6 +22,7 @@ public class Controller {
 	}
 
 	public void keyPressed(KeyEvent evt) {
+		System.out.println("TEST");
 		switch (evt.getKeyCode()) {
 			case KeyEvent.VK_DOWN:
 				model.moveCannonDown();
@@ -39,7 +40,14 @@ public class Controller {
 				model.shootMissile();
 				break;
 			case KeyEvent.VK_Q:
+				System.out.println("TEST 2");
 				model.changeShootingMode();
+				break;
+			case KeyEvent.VK_G:
+				model.gravityUp();
+				break;
+			case KeyEvent.VK_H:
+				model.gravityDown();
 				break;
 			case KeyEvent.VK_F1:
 				view.showHelp();
@@ -58,7 +66,6 @@ public class Controller {
 					model.forceDown();
 					break;
 				}
-				System.out.println("cokoli " + evt.getKeyChar());
 				break;
 		}
 	}
