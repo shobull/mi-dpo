@@ -24,12 +24,12 @@ public abstract class GameObject implements IAcceptable {
 		return y;
 	}
 
+	public abstract void accept(IVisitor visitor);
+
 	public boolean collidesWith(GameObject anotherObject) {
 		return Math.abs(this.x - anotherObject.x) < ModelConfig.COLLISION_MARGIN
 				&& Math.abs(this.y - anotherObject.y) < ModelConfig.COLLISION_MARGIN;
 	}
-
-	public abstract void accept(IVisitor visitor);
 
 	@Override
 	public boolean equals(Object o) {
